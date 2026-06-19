@@ -2,396 +2,402 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guild Comp — Gank &amp; Brawl</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Rise of Dahalo — War Ledger</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
   :root {
-    --bg:       #0e0f11;
-    --surface:  #16181c;
-    --surface2: #1e2026;
-    --border:   rgba(255,255,255,0.07);
-    --border2:  rgba(255,255,255,0.13);
-    --text:     #e8eaf0;
-    --muted:    #7a7f8e;
-    --accent:   #c8a84b;
+    --bg:        #0d0d0f;
+    --surface:   #1a1812;
+    --surface-2: #221e15;
+    --surface-3: #2c2719;
+    --line:      rgba(212,167,44,0.14);
+    --line-2:    rgba(212,167,44,0.26);
+    --ink:       #e8e2d0;
+    --ink-dim:   #b8ab83;
+    --ink-faint: #7a6f52;
 
-    --healer:  #22c55e; --healer-bg:  rgba(34,197,94,0.12);
-    --support: #eab308; --support-bg: rgba(234,179,8,0.12);
-    --dps:     #ef4444; --dps-bg:     rgba(239,68,68,0.12);
-    --tank:    #3b82f6; --tank-bg:    rgba(59,130,246,0.12);
-    --gank:    #a855f7; --gank-bg:    rgba(168,85,247,0.12);
+    --accent:     #d4a72c;
+    --accent-dim: rgba(212,167,44,0.16);
+    --accent-ink: #1a1305;
+
+    --healer:  #6bab7a; --healer-bg:  rgba(107,171,122,0.14);
+    --support: #cf9d3f; --support-bg: rgba(207,157,63,0.14);
+    --dps:     #c75847; --dps-bg:     rgba(199,88,71,0.14);
+    --tank:    #5d8fc9; --tank-bg:    rgba(93,143,201,0.14);
+    --gank:    #9b72c4; --gank-bg:    rgba(155,114,196,0.14);
+
+    --header-h: 64px;
+    --tabs-h: 46px;
+    --controls-h: 56px;
+  }
+
+  html { background: var(--bg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 
   body {
-    background: var(--bg);
-    color: var(--text);
+    background:
+      radial-gradient(ellipse 1200px 600px at 15% -10%, rgba(212,167,44,0.09), transparent 60%),
+      radial-gradient(ellipse 900px 500px at 100% 0%, rgba(244,196,48,0.06), transparent 55%),
+      var(--bg);
+    color: var(--ink);
     font-family: 'Inter', system-ui, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
+  ::selection { background: var(--accent-dim); color: var(--ink); }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   /* ── HEADER ── */
   .site-header {
-    border-bottom: 1px solid var(--border);
-    padding: 18px 32px;
+    border-bottom: 1px solid var(--line);
+    padding: 0 28px;
+    height: var(--header-h);
     display: flex;
     align-items: center;
     gap: 14px;
     flex-shrink: 0;
   }
   .guild-mark {
-    width: 40px; height: 40px;
-    background: var(--accent); border-radius: 9px;
+    width: 38px; height: 38px;
+    background: linear-gradient(155deg, var(--accent), #8a6d1f);
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 0 20px rgba(200,168,75,0.3);
+    box-shadow: 0 0 0 1px rgba(232,226,208,0.1) inset, 0 6px 18px -6px rgba(212,167,44,0.55);
   }
-  .guild-mark svg { width: 20px; height: 20px; fill: #0e0f11; }
+  .guild-mark svg { width: 19px; height: 19px; fill: var(--accent-ink); }
+  .header-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
   .header-text h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 19px; font-weight: 700;
-    color: var(--text); letter-spacing: -0.3px;
-  }
-  .header-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-top: 3px; }
-  .meta-pill {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; color: var(--muted);
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 999px; padding: 2px 8px;
-  }
-  .meta-pill svg {
-    width: 10px; height: 10px; stroke: var(--muted); fill: none;
-    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
-  }
-  .header-actions { margin-left: auto; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: 7px;
-    font-size: 12px; font-weight: 500; cursor: pointer;
-    border: 1px solid var(--border2);
-    background: var(--surface2); color: var(--text);
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    font-family: inherit;
-  }
-  .btn svg { transition: stroke 0.15s; }
-  .btn:hover { background: #252830; border-color: var(--accent); color: var(--accent); }
-  .btn:hover svg { stroke: var(--accent); }
-
-  /* ── CONTROLS ── */
-  .controls {
-    display: flex; gap: 8px; align-items: center;
-    padding: 10px 32px; flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 240px; }
-  .search-wrap svg {
-    position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
-    width: 13px; height: 13px; stroke: var(--muted); fill: none;
-    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;
-  }
-  .search-wrap input {
-    width: 100%; padding: 6px 10px 6px 28px;
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 7px; color: var(--text); font-size: 13px;
-    outline: none; font-family: inherit;
-  }
-  .search-wrap input::placeholder { color: var(--muted); }
-  .search-wrap input:focus { border-color: var(--accent); }
-
-  .filter-group { display: flex; gap: 3px; flex-wrap: wrap; }
-  .filter-btn {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 5px 11px; border-radius: 6px;
-    border: 1px solid var(--border2); background: transparent;
-    color: var(--muted); font-size: 12px; font-weight: 500;
-    cursor: pointer; font-family: inherit; transition: all 0.12s;
-  }
-  .filter-btn .fb-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    flex-shrink: 0; opacity: 0.45; transition: opacity 0.12s;
-  }
-  .filter-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
-  .filter-btn:hover .fb-dot { opacity: 0.75; }
-  .filter-btn.active { border-color: rgba(255,255,255,0.25); background: var(--surface2); color: var(--text); }
-  .filter-btn.active .fb-dot { opacity: 1; }
-  .filter-btn[data-role="healer"].active { border-color: var(--healer); color: var(--healer); background: var(--healer-bg); }
-  .filter-btn[data-role="support"].active { border-color: var(--support); color: var(--support); background: var(--support-bg); }
-  .filter-btn[data-role="dps"].active    { border-color: var(--dps);     color: var(--dps);     background: var(--dps-bg); }
-  .filter-btn[data-role="tank"].active   { border-color: var(--tank);    color: var(--tank);    background: var(--tank-bg); }
-  .filter-btn[data-role="gank"].active   { border-color: var(--gank);    color: var(--gank);    background: var(--gank-bg); }
-  .count-label { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
-
-  /* ── MAIN SPLIT LAYOUT ── */
-  .main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* ── LEFT: TABLE PANE ── */
-  .table-pane {
-    width: 50%;
-    flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    padding: 9px 16px;
-    font-size: 10px; font-weight: 500; color: var(--muted);
-    text-align: left; text-transform: uppercase; letter-spacing: 0.07em;
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; background: var(--bg); z-index: 5;
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 21px; font-weight: 800;
+    color: var(--ink); letter-spacing: 0.02em;
+    line-height: 1;
     white-space: nowrap;
   }
-  col.c-prio  { width: 40px; }
-  col.c-role  { width: 100px; }
-  col.c-weapon { width: auto; }
-
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.08s;
+  .header-text .eyebrow {
+    font-size: 10px; font-weight: 600; color: var(--ink-faint);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    white-space: nowrap;
   }
-  td { padding: 7px 16px; vertical-align: middle; }
-
-  /* role tint */
-  tr[data-role="healer"] { background: rgba(34,197,94,0.03); }
-  tr[data-role="support"] { background: rgba(234,179,8,0.03); }
-  tr[data-role="dps"]     { background: rgba(239,68,68,0.03); }
-  tr[data-role="tank"]    { background: rgba(59,130,246,0.03); }
-  tr[data-role="gank"]    { background: rgba(168,85,247,0.03); }
-
-  /* role left border */
-  tr[data-role="healer"] td:first-child { border-left: 2px solid var(--healer); }
-  tr[data-role="support"] td:first-child { border-left: 2px solid var(--support); }
-  tr[data-role="dps"]     td:first-child { border-left: 2px solid var(--dps); }
-  tr[data-role="tank"]    td:first-child { border-left: 2px solid var(--tank); }
-  tr[data-role="gank"]    td:first-child { border-left: 2px solid var(--gank); }
-
-  tbody tr:hover { background: var(--surface2) !important; }
-  tbody tr.selected { background: var(--surface2) !important; }
-  tbody tr.selected td:first-child { border-left-width: 3px; }
-
-  /* priority */
-  .prio-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px; font-weight: 700; color: var(--muted);
-    display: block; text-align: center;
+  .header-actions { margin-left: auto; flex-shrink: 0; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 14px; border-radius: 8px;
+    font-size: 12.5px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--line-2);
+    background: var(--surface-2); color: var(--ink);
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+    font-family: inherit;
+    min-height: 44px;
   }
-  .prio-num[data-rank="1"] { color: #c8a84b; }
-  .prio-num[data-rank="2"] { color: #9ca3af; }
-  .prio-num[data-rank="3"] { color: #b45309; }
-  tr.selected .prio-num, tr:hover .prio-num { color: var(--accent); }
-
-  /* role pill */
-  .role-pill {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 2px 8px; border-radius: 999px;
-    font-size: 11px; font-weight: 600; white-space: nowrap;
-  }
-  .role-pill-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-  .role-healer { color: var(--healer); background: var(--healer-bg); }
-  .role-support { color: var(--support); background: var(--support-bg); }
-  .role-dps    { color: var(--dps);     background: var(--dps-bg); }
-  .role-tank   { color: var(--tank);    background: var(--tank-bg); }
-  .role-gank   { color: var(--gank);    background: var(--gank-bg); }
-
-  /* weapon cell */
-  .weapon-cell { display: flex; align-items: center; gap: 8px; }
-  .weapon-cell img {
-    width: 26px; height: 26px; border-radius: 5px;
-    border: 1px solid var(--border2); background: var(--surface2);
-    object-fit: contain; flex-shrink: 0;
-  }
-  .weapon-name {
-    font-size: 13px; color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .empty-state { padding: 48px 16px; text-align: center; color: var(--muted); font-size: 13px; }
-
-  /* ── RIGHT: DETAIL PANE ── */
-  .detail-pane {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* placeholder */
-  .detail-placeholder {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 40px;
-    color: var(--muted);
-  }
-  .detail-placeholder svg {
-    width: 48px; height: 48px;
-    stroke: var(--border2); fill: none;
-    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
-  }
-  .detail-placeholder p { font-size: 14px; color: var(--muted); }
-  .detail-placeholder small { font-size: 12px; color: #4a4f5e; }
-
-  /* placeholder slot grid */
-  .ph-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 72px);
-    gap: 10px;
-    margin-top: 8px;
-  }
-  .ph-slot {
-    width: 72px; height: 72px; border-radius: 10px;
-    border: 1px dashed var(--border2);
-    background: var(--surface2);
-    opacity: 0.4;
-  }
-
-  /* detail card */
-  .detail-card {
-    display: none;
-    flex-direction: column;
-    padding: 32px 40px;
-    gap: 28px;
-  }
-  .detail-card.visible { display: flex; }
-
-  /* card header */
-  .card-header { display: flex; flex-direction: column; gap: 10px; }
-  .card-role-bar { height: 3px; border-radius: 2px; width: 40px; }
-  .card-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 26px; font-weight: 700; color: var(--text);
-    letter-spacing: -0.5px;
-  }
-  .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .card-prio {
-    font-size: 12px; font-weight: 600;
-    background: var(--surface2); border: 1px solid var(--border2);
-    padding: 3px 10px; border-radius: 999px; color: var(--muted);
-  }
-  .card-note {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 12px; color: var(--support); font-style: italic;
-    background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.2);
-    padding: 3px 10px; border-radius: 999px;
-  }
-
-  /* slot sections */
-  .section-label {
-    font-size: 10px; font-weight: 600; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.1em;
-    margin-bottom: 12px;
-  }
-  .slots-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-  .slot-card {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    padding: 12px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-align: center;
-    transition: border-color 0.15s;
-    min-height: 110px;
-  }
-  .slot-card:hover { border-color: rgba(255,255,255,0.22); }
-  .slot-card.empty { opacity: 0.3; }
-  .slot-card.empty.spacer { opacity: 0; pointer-events: none; border-color: transparent; background: transparent; }
-  .slot-card img {
-    width: 56px; height: 56px; border-radius: 8px;
-    border: 1px solid var(--border2); background: var(--bg);
-    object-fit: contain; flex-shrink: 0;
-  }
-  .slot-card .slot-empty-icon {
-    width: 56px; height: 56px; border-radius: 8px;
-    border: 1px dashed var(--border2); background: var(--bg);
-    flex-shrink: 0;
-  }
-  .slot-info { display: flex; flex-direction: column; gap: 2px; width: 100%; }
-  .slot-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .slot-name  { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3;
-                overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .slot-card.empty .slot-name { color: var(--muted); font-style: italic; }
-
-  .consumables-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
+  .btn svg { transition: stroke 0.15s; flex-shrink: 0; }
+  .btn:hover { background: var(--surface-3); border-color: var(--accent); color: var(--accent); }
+  .btn:hover svg { stroke: var(--accent); }
+  .btn:active { transform: scale(0.97); }
+  .btn .btn-label { white-space: nowrap; }
 
   /* ── TAB NAV ── */
   .tab-nav {
     display: flex;
     align-items: center;
-    gap: 2px;
-    padding: 0 32px;
-    border-bottom: 1px solid var(--border);
+    gap: 4px;
+    padding: 0 28px;
+    height: var(--tabs-h);
+    border-bottom: 1px solid var(--line);
     flex-shrink: 0;
     overflow-x: auto;
+    scrollbar-width: none;
   }
   .tab-nav::-webkit-scrollbar { display: none; }
   .tab-btn {
     display: inline-flex; align-items: center;
-    padding: 10px 16px;
-    font-size: 13px; font-weight: 500;
-    color: var(--muted); background: transparent;
+    height: 100%;
+    padding: 0 14px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-dim); background: transparent;
     border: none; border-bottom: 2px solid transparent;
     cursor: pointer; font-family: inherit;
     white-space: nowrap;
     transition: color 0.12s, border-color 0.12s;
     margin-bottom: -1px;
   }
-  .tab-btn:hover { color: var(--text); }
+  .tab-btn:hover { color: var(--ink); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-  /* tab content panels */
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex; gap: 8px; align-items: center;
+    padding: 10px 28px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+    min-height: var(--controls-h);
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 260px; }
+  .search-wrap svg {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; stroke: var(--ink-faint); fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%; padding: 9px 10px 9px 30px;
+    background: var(--surface-2); border: 1px solid var(--line-2);
+    border-radius: 8px; color: var(--ink); font-size: 13px;
+    outline: none; font-family: inherit;
+    min-height: 38px;
+  }
+  .search-wrap input::placeholder { color: var(--ink-faint); }
+  .search-wrap input:focus { border-color: var(--accent); }
+
+  .filter-group { display: flex; gap: 4px; flex-wrap: wrap; }
+  .filter-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 7px;
+    border: 1px solid var(--line-2); background: transparent;
+    color: var(--ink-dim); font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.12s;
+    min-height: 34px;
+  }
+  .filter-btn .fb-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    flex-shrink: 0; opacity: 0.5; transition: opacity 0.12s;
+  }
+  .filter-btn:hover { color: var(--ink); border-color: var(--line-2); background: var(--surface-2); }
+  .filter-btn:hover .fb-dot { opacity: 0.8; }
+  .filter-btn.active { border-color: var(--line-2); background: var(--surface-2); color: var(--ink); }
+  .filter-btn.active .fb-dot { opacity: 1; }
+  .filter-btn[data-role="healer"].active  { border-color: var(--healer);  color: var(--healer);  background: var(--healer-bg); }
+  .filter-btn[data-role="support"].active { border-color: var(--support); color: var(--support); background: var(--support-bg); }
+  .filter-btn[data-role="dps"].active     { border-color: var(--dps);     color: var(--dps);     background: var(--dps-bg); }
+  .filter-btn[data-role="tank"].active    { border-color: var(--tank);    color: var(--tank);    background: var(--tank-bg); }
+  .count-label {
+    margin-left: auto; font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; font-weight: 500; color: var(--ink-faint); white-space: nowrap;
+  }
+
+  /* ── MAIN SPLIT LAYOUT ── */
+  .main { display: flex; flex: 1; overflow: hidden; min-height: 0; position: relative; }
+
+  /* ── LEFT: TABLE PANE ── */
+  .table-pane { width: 50%; flex-shrink: 0; border-right: 1px solid var(--line); overflow-y: auto; overflow-x: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 10px 16px;
+    font-size: 10px; font-weight: 600; color: var(--ink-faint);
+    text-align: left; text-transform: uppercase; letter-spacing: 0.09em;
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--bg); z-index: 5;
+    white-space: nowrap;
+  }
+  col.c-prio { width: 44px; }
+  col.c-role { width: 102px; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.08s;
+  }
+  td { padding: 9px 16px; vertical-align: middle; height: 44px; }
+
+  tr[data-role="healer"]  { background: rgba(107,171,122,0.035); }
+  tr[data-role="support"] { background: rgba(207,157,63,0.035); }
+  tr[data-role="dps"]     { background: rgba(199,88,71,0.035); }
+  tr[data-role="tank"]    { background: rgba(93,143,201,0.035); }
+
+  tr[data-role="healer"]  td:first-child { border-left: 2px solid var(--healer); }
+  tr[data-role="support"] td:first-child { border-left: 2px solid var(--support); }
+  tr[data-role="dps"]     td:first-child { border-left: 2px solid var(--dps); }
+  tr[data-role="tank"]    td:first-child { border-left: 2px solid var(--tank); }
+
+  tbody tr:hover { background: var(--surface-2) !important; }
+  tbody tr.selected { background: var(--surface-2) !important; }
+  tbody tr.selected td:first-child { border-left-width: 3px; }
+
+  /* priority rank seal */
+  .prio-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; font-weight: 600; color: var(--ink-dim);
+    display: flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px;
+    margin: 0 auto;
+  }
+  .prio-num[data-rank="1"],
+  .prio-num[data-rank="2"],
+  .prio-num[data-rank="3"] {
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+  }
+  .prio-num[data-rank="1"] { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+  .prio-num[data-rank="2"] { color: #c7cad2; border-color: var(--line-2); }
+  .prio-num[data-rank="3"] { color: #b08456; border-color: rgba(176,132,86,0.4); }
+  tr.selected .prio-num:not([data-rank]), tr:hover .prio-num:not([data-rank]) { color: var(--accent); }
+
+  /* role pill */
+  .role-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; white-space: nowrap;
+  }
+  .role-pill-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .role-healer  { color: var(--healer);  background: var(--healer-bg); }
+  .role-support { color: var(--support); background: var(--support-bg); }
+  .role-dps     { color: var(--dps);     background: var(--dps-bg); }
+  .role-tank    { color: var(--tank);    background: var(--tank-bg); }
+
+  .weapon-cell { display: flex; align-items: center; gap: 9px; }
+  .weapon-cell img {
+    width: 27px; height: 27px; border-radius: 6px;
+    border: 1px solid var(--line-2); background: var(--surface-2);
+    object-fit: contain; flex-shrink: 0;
+  }
+  .weapon-name { font-size: 13px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .empty-state { padding: 48px 16px; text-align: center; color: var(--ink-dim); font-size: 13px; }
+
+  /* ── RIGHT: DETAIL PANE ── */
+  .detail-pane { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+  .detail-placeholder {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+    padding: 40px; color: var(--ink-dim);
+  }
+  .detail-placeholder svg { width: 46px; height: 46px; stroke: var(--line-2); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .detail-placeholder p { font-size: 14px; color: var(--ink-dim); }
+  .detail-placeholder small { font-size: 12px; color: var(--ink-faint); }
+
+  .ph-grid { display: grid; grid-template-columns: repeat(3, 72px); gap: 10px; margin-top: 8px; }
+  .ph-slot { width: 72px; height: 72px; border-radius: 10px; border: 1px dashed var(--line-2); background: var(--surface-2); opacity: 0.4; }
+
+  .detail-back-btn {
+    display: none;
+    align-items: center; gap: 6px;
+    align-self: flex-start;
+    padding: 9px 14px; border-radius: 8px;
+    border: 1px solid var(--line-2); background: var(--surface-2);
+    color: var(--ink-dim); font-size: 12.5px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    min-height: 40px;
+  }
+  .detail-back-btn:hover { color: var(--ink); border-color: var(--accent); }
+
+  .detail-card { display: none; flex-direction: column; padding: 32px 36px; gap: 24px; }
+  .detail-card.visible { display: flex; }
+
+  .card-header { display: flex; flex-direction: column; gap: 11px; }
+  .card-role-bar { height: 3px; border-radius: 2px; width: 40px; }
+  .card-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 28px; font-weight: 700; color: var(--ink);
+    letter-spacing: 0.01em; line-height: 1.05;
+  }
+  .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-prio {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; font-weight: 600;
+    background: var(--surface-2); border: 1px solid var(--line-2);
+    padding: 4px 10px; border-radius: 999px; color: var(--ink-dim);
+  }
+  .card-note {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--support);
+    background: var(--support-bg); border: 1px solid rgba(207,157,63,0.3);
+    padding: 4px 10px 4px 8px; border-radius: 999px;
+  }
+  .card-note svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  .section-label { font-size: 10px; font-weight: 600; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+  .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .slot-card {
+    background: var(--surface-2); border: 1px solid var(--line-2); border-radius: 10px;
+    padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    text-align: center; transition: border-color 0.15s; min-height: 110px;
+  }
+  .slot-card:hover { border-color: var(--line-2); background: var(--surface-3); }
+  .slot-card.empty { opacity: 0.35; }
+  .slot-card.empty.spacer { opacity: 0; pointer-events: none; border-color: transparent; background: transparent; }
+  .slot-card img { width: 56px; height: 56px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--bg); object-fit: contain; flex-shrink: 0; }
+  .slot-card .slot-empty-icon { width: 56px; height: 56px; border-radius: 8px; border: 1px dashed var(--line-2); background: var(--bg); flex-shrink: 0; }
+  .slot-info { display: flex; flex-direction: column; gap: 2px; width: 100%; }
+  .slot-label { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.07em; }
+  .slot-name { font-size: 12px; font-weight: 500; color: var(--ink); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .slot-card.empty .slot-name { color: var(--ink-dim); font-style: italic; }
+
   .tab-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
   .tab-panel.active { display: flex; }
   .tab-panel > .controls { flex-shrink: 0; }
   .tab-panel > .main { flex: 1; overflow: hidden; min-height: 0; }
 
-  .tab-empty {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 10px;
-    color: var(--muted);
-  }
-  .tab-empty svg {
-    width: 36px; height: 36px; stroke: var(--border2); fill: none;
-    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
-  }
-  .tab-empty p { font-size: 13px; }
-  .tab-empty small { font-size: 11px; color: #4a4f5e; }
+  .tab-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--ink-dim); }
+  .tab-empty svg { width: 38px; height: 38px; stroke: var(--line-2); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .tab-empty p { font-size: 13.5px; font-weight: 500; color: var(--ink); }
+  .tab-empty small { font-size: 11.5px; color: var(--ink-faint); }
+
   #toast {
     position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(8px);
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 8px 18px;
-    font-size: 13px; color: var(--text);
+    background: var(--surface-2); border: 1px solid var(--line-2);
+    border-radius: 8px; padding: 9px 18px;
+    font-size: 13px; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
     opacity: 0; transition: opacity 0.2s, transform 0.2s;
     pointer-events: none; z-index: 9999; white-space: nowrap;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast svg { width: 14px; height: 14px; stroke: var(--accent); flex-shrink: 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 880px) {
+    .site-header { padding: 0 16px; }
+    .tab-nav, .controls { padding-left: 16px; padding-right: 16px; }
+    .header-text .eyebrow { display: none; }
+    .btn .btn-label { display: none; }
+    .btn { padding: 0; width: 44px; justify-content: center; }
+
+    .main { flex-direction: row; }
+    .table-pane { width: 100%; border-right: none; }
+
+    .detail-pane {
+      position: absolute; inset: 0; z-index: 20;
+      background: var(--bg);
+      transform: translateX(100%);
+      transition: transform 0.22s ease;
+    }
+    .detail-pane.open { transform: translateX(0); }
+    .detail-back-btn { display: inline-flex; }
+    .detail-card { padding: 20px 18px 32px; gap: 20px; }
+    .card-title { font-size: 24px; }
+
+    .count-label { width: 100%; order: 3; margin-left: 0; }
+    .search-wrap { max-width: none; }
+
+    td, th { padding: 10px 12px; }
+    .prio-num { width: 28px; height: 28px; }
+  }
+
+  @media (max-width: 480px) {
+    .header-text h1 { font-size: 17px; }
+    .guild-mark { width: 34px; height: 34px; }
+    .slots-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .slot-card { padding: 10px 6px; min-height: 96px; }
+    .slot-card img, .slot-card .slot-empty-icon { width: 44px; height: 44px; }
+  }
 </style>
 </head>
 <body>
@@ -399,18 +405,19 @@
 <!-- HEADER -->
 <header class="site-header">
   <div class="guild-mark">
-    <svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V6l-8-4z"/><path d="M12 7v9M9 10l3-3 3 3" stroke="#0d0d0f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
   </div>
   <div class="header-text">
     <h1>RISE OF DAHALO</h1>
+    <span class="eyebrow">War ledger</span>
   </div>
   <div class="header-actions">
-    <button class="btn" id="copy-btn">
+    <button class="btn" id="copy-btn" aria-label="Copy Discord link">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="9" y="9" width="13" height="13" rx="2"/>
         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
       </svg>
-      Copy Discord link
+      <span class="btn-label">Copy Discord link</span>
     </button>
   </div>
 </header>
@@ -425,6 +432,7 @@
   <button class="tab-btn" data-tab="groupdungeon">Group Dungeon</button>
   <button class="tab-btn" data-tab="avadungeon">Ava Dungeon</button>
 </nav>
+
 <div class="tab-panel active" id="tab-brawl">
 <div class="controls">
   <div class="search-wrap">
@@ -433,38 +441,23 @@
   </div>
   <div class="filter-group" id="filter-group">
     <button class="filter-btn active" data-role="all">All</button>
-    <button class="filter-btn" data-role="dps">    <span class="fb-dot" style="background:var(--dps)"></span>DPS</button>
-    <button class="filter-btn" data-role="healer"> <span class="fb-dot" style="background:var(--healer)"></span>Healer</button>
+    <button class="filter-btn" data-role="dps"><span class="fb-dot" style="background:var(--dps)"></span>DPS</button>
+    <button class="filter-btn" data-role="healer"><span class="fb-dot" style="background:var(--healer)"></span>Healer</button>
     <button class="filter-btn" data-role="support"><span class="fb-dot" style="background:var(--support)"></span>Support</button>
-    <button class="filter-btn" data-role="tank">   <span class="fb-dot" style="background:var(--tank)"></span>Tank</button>
+    <button class="filter-btn" data-role="tank"><span class="fb-dot" style="background:var(--tank)"></span>Tank</button>
   </div>
-  <span class="count-label" id="count-label">20 builds</span>
+  <span class="count-label" id="count-label">0 builds</span>
 </div>
-
-<!-- MAIN SPLIT -->
 <div class="main">
-  <!-- LEFT: table -->
   <div class="table-pane">
     <table>
-      <colgroup>
-        <col class="c-prio">
-        <col class="c-role">
-        <col class="c-weapon">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Role</th>
-          <th>Main weapon</th>
-        </tr>
-      </thead>
+      <colgroup><col class="c-prio"><col class="c-role"><col class="c-weapon"></colgroup>
+      <thead><tr><th>#</th><th>Role</th><th>Main weapon</th></tr></thead>
       <tbody id="tbody"></tbody>
     </table>
     <div class="empty-state" id="empty" style="display:none">No builds match your filter.</div>
   </div>
-
-  <!-- RIGHT: detail panel -->
-  <div class="detail-pane" id="detail-pane">
+  <div class="detail-pane" id="brawl-detail-pane">
     <div class="detail-placeholder" id="detail-placeholder">
       <div class="ph-grid">
         <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
@@ -474,30 +467,109 @@
       <p>Select a build to inspect it</p>
       <small>Click any row on the left</small>
     </div>
+    <button class="detail-back-btn" data-back-for="brawl">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to builds
+    </button>
     <div class="detail-card" id="detail-card"></div>
   </div>
 </div>
-</div><!-- /tab-brawl -->
+</div>
 
 <div class="tab-panel" id="tab-gank"><div class="tab-empty">
   <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
   <p>Gank comp — coming soon</p><small>This tab will be filled in later</small>
 </div></div>
 
-<div class="tab-panel" id="tab-kite"><div class="tab-empty">
-  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-  <p>Kite &amp; Clap comp — coming soon</p><small>This tab will be filled in later</small>
-</div></div>
+<div class="tab-panel" id="tab-kite">
+<div class="controls">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="kite-search" placeholder="Search weapon, slot…" autocomplete="off">
+  </div>
+  <div class="filter-group" id="kite-filter-group">
+    <button class="filter-btn active" data-role="all">All</button>
+    <button class="filter-btn" data-role="dps"><span class="fb-dot" style="background:var(--dps)"></span>DPS</button>
+    <button class="filter-btn" data-role="healer"><span class="fb-dot" style="background:var(--healer)"></span>Healer</button>
+    <button class="filter-btn" data-role="support"><span class="fb-dot" style="background:var(--support)"></span>Support</button>
+    <button class="filter-btn" data-role="tank"><span class="fb-dot" style="background:var(--tank)"></span>Tank</button>
+  </div>
+  <span class="count-label" id="kite-count-label">0 builds</span>
+</div>
+<div class="main">
+  <div class="table-pane">
+    <table>
+      <colgroup><col class="c-prio"><col class="c-role"><col class="c-weapon"></colgroup>
+      <thead><tr><th>#</th><th>Role</th><th>Main weapon</th></tr></thead>
+      <tbody id="kite-tbody"></tbody>
+    </table>
+    <div class="empty-state" id="kite-empty" style="display:none">No builds match your filter.</div>
+  </div>
+  <div class="detail-pane" id="kite-detail-pane">
+    <div class="detail-placeholder" id="kite-detail-placeholder">
+      <div class="ph-grid">
+        <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
+        <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
+        <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
+      </div>
+      <p>Select a build to inspect it</p>
+      <small>Click any row on the left</small>
+    </div>
+    <button class="detail-back-btn" data-back-for="kite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to builds
+    </button>
+    <div class="detail-card" id="kite-detail-card"></div>
+  </div>
+</div>
+</div>
 
 <div class="tab-panel" id="tab-brawlclap"><div class="tab-empty">
   <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
   <p>Brawl &amp; Clap comp — coming soon</p><small>This tab will be filled in later</small>
 </div></div>
 
-<div class="tab-panel" id="tab-tracking"><div class="tab-empty">
-  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-  <p>Tracking comp — coming soon</p><small>This tab will be filled in later</small>
-</div></div>
+<div class="tab-panel" id="tab-tracking">
+<div class="controls">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="tracking-search" placeholder="Search weapon, slot…" autocomplete="off">
+  </div>
+  <div class="filter-group" id="tracking-filter-group">
+    <button class="filter-btn active" data-role="all">All</button>
+    <button class="filter-btn" data-role="dps"><span class="fb-dot" style="background:var(--dps)"></span>DPS</button>
+    <button class="filter-btn" data-role="healer"><span class="fb-dot" style="background:var(--healer)"></span>Healer</button>
+    <button class="filter-btn" data-role="tank"><span class="fb-dot" style="background:var(--tank)"></span>Tank</button>
+  </div>
+  <span class="count-label" id="tracking-count-label">0 builds</span>
+</div>
+<div class="main">
+  <div class="table-pane">
+    <table>
+      <colgroup><col class="c-prio"><col class="c-role"><col class="c-weapon"></colgroup>
+      <thead><tr><th>Tier</th><th>Role</th><th>Main weapon</th></tr></thead>
+      <tbody id="tracking-tbody"></tbody>
+    </table>
+    <div class="empty-state" id="tracking-empty" style="display:none">No builds match your filter.</div>
+  </div>
+  <div class="detail-pane" id="tracking-detail-pane">
+    <div class="detail-placeholder" id="tracking-detail-placeholder">
+      <div class="ph-grid">
+        <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
+        <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
+        <div class="ph-slot"></div><div class="ph-slot"></div><div class="ph-slot"></div>
+      </div>
+      <p>Select a build to inspect it</p>
+      <small>Click any row on the left</small>
+    </div>
+    <button class="detail-back-btn" data-back-for="tracking">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to builds
+    </button>
+    <div class="detail-card" id="tracking-detail-card"></div>
+  </div>
+</div>
+</div>
 
 <div class="tab-panel" id="tab-groupdungeon"><div class="tab-empty">
   <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -510,7 +582,6 @@
 </div></div>
 
 <div id="toast"></div>
-
 <script>
 /* ─────────────────────────────────────────
    DATA — nothing lives in the DOM
@@ -561,11 +632,112 @@ const ITEM_MAP = {
   "Martlock Cape":      "T8_CAPEITEM_FW_MARTLOCK",
   "Avalonian Omelette": "T7_MEAL_OMELETTE_AVALON@1",
   "Beef stew":          "T8_MEAL_STEW@1",
+  "Deadwater eel stew": "T8_MEAL_STEW_FISH",
   "Major Gigantify":    "T7_POTION_REVIVE",
+  "Gigantify Potion":   "T7_POTION_REVIVE",
+  // Kite & Clap weapons
+  "Hand of Justice":    "T8_2H_HAMMER_AVALON",
+  "Heavy Mace":         "T8_2H_MACE",
+  "Great Arcane":       "T8_2H_ARCANESTAFF",
+  "Bedrock":            "T8_MAIN_ROCKMACE_KEEPER",
+  "Occult":             "T8_2H_ARCANESTAFF_HELL",
+  "Lifecurse":          "T8_MAIN_CURSEDSTAFF_UNDEAD",
+  "Rootbound":          "T8_2H_SHAPESHIFTER_SET2",
+  "Permafrost":         "T8_2H_ICECRYSTAL_UNDEAD",
+  "Realmbreaker":       "T8_2H_AXE_AVALON",
+  "Spirit hunter":      "T8_2H_HARPOON_HELL",
+  "Spiked":             "T8_2H_KNUCKLES_SET3",
+  "Rotcaller":          "T8_MAIN_CURSEDSTAFF_CRYSTAL",
+  "Rift Glaive":        "T8_2H_GLAIVE_CRYSTAL",
+  "Fallen":             "T8_2H_HOLYSTAFF_HELL",
+  "Exalted":            "T8_2H_HOLYSTAFF_CRYSTAL",
+  "Blight staff":       "T8_2H_NATURESTAFF_HELL",
+  "Earthrune":          "T8_2H_SHAPESHIFTER_KEEPER",
+  "Mace":               "T8_MAIN_MACE",
+  "Rampant":            "T8_2H_NATURESTAFF_KEEPER",
+  "Locus":              "T8_2H_ENIGMATICORB_MORGANA",
+  "Incubus":            "T8_MAIN_MACE_HELL",
+  "Carving sword":      "T8_2H_CLEAVER_HELL",
+  "Damnation":          "T8_2H_CURSEDSTAFF_MORGANA",
+  "1H Arcane":          "T8_MAIN_ARCANESTAFF",
+  "Heavy Crossbow":     "T8_2H_CROSSBOWLARGE",
+  "Longbow":            "T8_2H_LONGBOW",
+  "Wailing bow":        "T8_2H_BOW_HELL",
+  "Witchwork":          "T8_MAIN_ARCANESTAFF_UNDEAD",
+  // Kite & Clap offhands
+  "Timelocked Grimoire":"T8_OFF_TOME_CRYSTAL",
+  "Mistcaller":         "T8_OFF_HORN_KEEPER",
+  "Muisak":             "T8_OFF_DEMONSKULL_HELL",
+  "Astral aegis":       "T8_OFF_SHIELD_AVALON",
+  // Kite & Clap armour
+  "Knight armor":       "T8_ARMOR_PLATE_SET2",
+  "Duskweaver armor":   "T8_ARMOR_PLATE_FEY",
+  "Royal jacket":       "T8_ARMOR_LEATHER_ROYAL",
+  "Scholar robe":       "T8_ARMOR_CLOTH_SET1",
+  "Robe of purity":     "T8_ARMOR_CLOTH_AVALON",
+  // Kite & Clap helmets
+  "Knight helmet":      "T8_HEAD_PLATE_SET2",
+  "Druid cowl":         "T8_HEAD_CLOTH_KEEPER",
+  "Guardian helmet":    "T8_HEAD_PLATE_SET3",
+  "Miswalker hood":     "T8_HEAD_LEATHER_FEY",
+  // Kite & Clap feet
+  "Stalker shoes":      "T8_SHOES_LEATHER_MORGANA",
+  // Kite & Clap capes
+  "Morgana cape":       "T8_CAPEITEM_MORGANA",
+  // Tracking weapons
+  "Claws":              "T8_2H_CLAWPAIR",
+  "Primal":             "T8_2H_SHAPESHIFTER_SET3",
+  "Forcepulse Bracers": "T8_2H_KNUCKLES_CRYSTAL",
+  "Shadowcaller":       "T8_MAIN_CURSEDSTAFF_AVALON",
+  "Forgebark":          "T8_MAIN_NATURESTAFF_CRYSTAL",
+  "Lifetouch":          "T8_MAIN_HOLYSTAFF_MORGANA",
+  "Redemption":         "T8_2H_HOLYSTAFF_UNDEAD",
+  "Great Holy":         "T8_2H_HOLYSTAFF",
+  "1H Holy":            "T8_MAIN_HOLYSTAFF",
+  "Crystal Reaper":     "T8_2H_SCYTHE_CRYSTAL",
+  "Dagger pair":        "T8_2H_DAGGERPAIR",
+  "1H Dagger":          "T8_MAIN_DAGGER",
+  "Blazing":            "T8_2H_INFERNOSTAFF_MORGANA",
+  "Demon fang":         "T8_MAIN_DAGGER_HELL",
+  "Twin Slayers":       "T8_2H_DAGGERPAIR_CRYSTAL",
+  "Deathgivers":        "T8_2H_DUALSICKLE_UNDEAD",
+  "Trinity":            "T8_2H_TRIDENT_UNDEAD",
+  "Great Fire":         "T8_2H_FIRESTAFF",
+  "Hellspawn":          "T8_2H_SHAPESHIFTER_HELL",
+  "1H Curse":           "T8_MAIN_CURSEDSTAFF",
+  "Brawler gloves":     "T8_2H_KNUCKLES_SET1",
+  "Wildfire":           "T8_MAIN_FIRESTAFF_KEEPER",
+  "Boltcasters":        "T8_2H_DUALCROSSBOW_HELL",
+  "1H Fire":            "T8_MAIN_FIRESTAFF",
+  "Whispering bow":     "T8_2H_LONGBOW_UNDEAD",
+  // Tracking offhands
+  "Celestial censer":   "T8_OFF_CENSER_AVALON",
+  "Cryptcandle":        "T8_OFF_LAMP_UNDEAD",
+  // Tracking armour
+  "Royal robe":         "T8_ARMOR_CLOTH_ROYAL",
+  "Druid robe":         "T8_ARMOR_CLOTH_KEEPER",
+  // Tracking helmets
+  "Specter hood":       "T8_HEAD_LEATHER_UNDEAD",
+  "Royal cowl":         "T8_HEAD_CLOTH_ROYAL",
+  "Stalker hood":       "T8_HEAD_LEATHER_MORGANA",
+  "Assassin hood":      "T8_HEAD_LEATHER_SET3",
+  "Druid cowl":         "T8_HEAD_CLOTH_KEEPER",
+  "Royal jacket":       "T8_ARMOR_LEATHER_ROYAL",
+  // Tracking feet
+  "Cultist sandals":    "T8_SHOES_CLOTH_MORGANA",
+  "Royal sandals":      "T8_SHOES_CLOTH_ROYAL",
+  // Tracking capes
+  "Avalonian cape":     "T8_CAPEITEM_AVALON",
+  "Caerleon cape":      "T8_CAPEITEM_FW_CAERLEON",
+  "Lymhurst cape":      "T8_CAPEITEM_FW_LYMHURST",
+  // Tracking consumables
+  "Omelette":           "T7_MEAL_OMELETTE",
+  "Calming Potion":     "T3_POTION_MOB_RESET@1",
 };
 
-const ROLE_COLORS = { healer:"#22c55e", support:"#eab308", dps:"#ef4444", tank:"#3b82f6", gank:"#a855f7" };
+const ROLE_COLORS = { healer:"var(--healer)", support:"var(--support)", dps:"var(--dps)", tank:"var(--tank)", gank:"var(--gank)" };
 const ROLE_LABELS = { healer:"Healer", support:"Support", dps:"DPS", tank:"Tank", gank:"Gank" };
+const TIER_LABELS = { 1:"S", 2:"A", 3:"B", 4:"C" };
 
 const BUILDS = [
   { prio:1,  role:"tank",    weapon:"1H Mace",           offhand:"Leering Cane",    head:"Judicator Helmet", chest:"Judicator Armor",  feet:"Royal Shoes",      cape:"Bridgewatch Cape", food:"Avalonian Omelette", potion:"Major Gigantify", note:"" },
@@ -590,6 +762,91 @@ const BUILDS = [
   { prio:20, role:"healer",  weapon:"1H Nature Staff",   offhand:"Blueflame Torch", head:"Assassin Hood",    chest:"Royal Armor",      feet:"Stalker Boots",    cape:"Lymhurst Cape",    food:"Avalonian Omelette", potion:"Major Gigantify", note:"" },
 ];
 
+const BUILDS_KITE = [
+  { prio:1,  role:"tank",    weapon:"Hand of Justice", offhand:"",                    head:"Assassin Hood",    chest:"Judicator Armor",  feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:2,  role:"tank",    weapon:"Polehammer",      offhand:"",                    head:"Hellion Hood",     chest:"Knight armor",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:3,  role:"tank",    weapon:"Heavy Mace",      offhand:"",                    head:"Judicator Helmet", chest:"Duskweaver armor", feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:4,  role:"tank",    weapon:"Great Arcane",    offhand:"",                    head:"Assassin Hood",    chest:"Knight armor",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:5,  role:"support", weapon:"Bedrock",         offhand:"Timelocked Grimoire", head:"Assassin Hood",    chest:"Knight armor",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:6,  role:"support", weapon:"Incubus",         offhand:"Timelocked Grimoire", head:"Assassin Hood",    chest:"Demon Armor",      feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:7,  role:"support", weapon:"Occult",          offhand:"",                    head:"Assassin Hood",    chest:"Royal jacket",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:8,  role:"support", weapon:"Lifecurse",       offhand:"Timelocked Grimoire", head:"Assassin Hood",    chest:"Demon Armor",      feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:9,  role:"support", weapon:"Rootbound",       offhand:"",                    head:"Assassin Hood",    chest:"Judicator Armor",  feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:10, role:"dps",     weapon:"Permafrost",      offhand:"",                    head:"Assassin Hood",    chest:"Scholar robe",     feet:"Stalker shoes",    cape:"Morgana cape",     food:"Deadwater eel stew", potion:"Gigantify Potion", note:"" },
+  { prio:11, role:"dps",     weapon:"Realmbreaker",    offhand:"",                    head:"Knight helmet",    chest:"Royal jacket",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Deadwater eel stew", potion:"Gigantify Potion", note:"" },
+  { prio:12, role:"dps",     weapon:"Spirit hunter",   offhand:"",                    head:"Knight helmet",    chest:"Royal jacket",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Deadwater eel stew", potion:"Gigantify Potion", note:"" },
+  { prio:13, role:"dps",     weapon:"Spiked",          offhand:"",                    head:"Miswalker hood",   chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:14, role:"dps",     weapon:"Rotcaller",       offhand:"Muisak",              head:"Assassin Hood",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:15, role:"dps",     weapon:"Rift Glaive",     offhand:"",                    head:"Assassin Hood",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:16, role:"dps",     weapon:"Dawnsong",        offhand:"",                    head:"Assassin Hood",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:17, role:"healer",  weapon:"Hallowfall",      offhand:"Mistcaller",          head:"Druid cowl",       chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Lymhurst Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:18, role:"healer",  weapon:"Fallen",          offhand:"",                    head:"Druid cowl",       chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Lymhurst Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:19, role:"healer",  weapon:"Exalted",         offhand:"",                    head:"Assassin Hood",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Lymhurst Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:20, role:"healer",  weapon:"Blight staff",    offhand:"",                    head:"Guardian helmet",  chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Lymhurst Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:21, role:"tank",    weapon:"Earthrune",       offhand:"",                    head:"Assassin Hood",    chest:"Judicator Armor",  feet:"Stalker shoes",    cape:"Morgana cape",     food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:22, role:"tank",    weapon:"Mace",            offhand:"Astral aegis",        head:"Assassin Hood",    chest:"Judicator Armor",  feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:23, role:"healer",  weapon:"Rampant",         offhand:"",                    head:"Assassin Hood",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Lymhurst Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:24, role:"support", weapon:"Locus",           offhand:"",                    head:"Assassin Hood",    chest:"Judicator Armor",  feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:25, role:"support", weapon:"Oathkeepers",     offhand:"",                    head:"Assassin Hood",    chest:"Demon Armor",      feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:26, role:"support", weapon:"Carving sword",   offhand:"",                    head:"Knight helmet",    chest:"Demon Armor",      feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:27, role:"support", weapon:"Damnation",       offhand:"",                    head:"Assassin Hood",    chest:"Scholar robe",     feet:"Stalker shoes",    cape:"Morgana cape",     food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:28, role:"tank",    weapon:"1H Arcane",       offhand:"Astral aegis",        head:"Assassin Hood",    chest:"Knight armor",     feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Avalonian Omelette", potion:"Gigantify Potion", note:"" },
+  { prio:29, role:"dps",     weapon:"Heavy Crossbow",  offhand:"",                    head:"Knight helmet",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:30, role:"dps",     weapon:"Longbow",         offhand:"",                    head:"Knight helmet",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:31, role:"dps",     weapon:"Wailing bow",     offhand:"",                    head:"Assassin Hood",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Beef stew",          potion:"Gigantify Potion", note:"" },
+  { prio:32, role:"dps",     weapon:"Witchwork",       offhand:"Muisak",              head:"Knight helmet",    chest:"Robe of purity",   feet:"Stalker shoes",    cape:"Smuggler Cape",    food:"Deadwater eel stew", potion:"Gigantify Potion", note:"" },
+];
+
+const BUILDS_TRACKING = [
+  // ── S TIER ──
+  { prio:1, role:"tank",   weapon:"Incubus",           offhand:"Mistcaller",          head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Avalonian cape",  food:"Omelette",  potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:1, role:"tank",   weapon:"Earthrune",         offhand:"",                    head:"Specter hood",   chest:"Royal jacket",    feet:"Hunter Shoes",    cape:"Caerleon cape",   food:"Omelette",  potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:1, role:"healer", weapon:"Forgebark",         offhand:"Celestial censer",    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:1, role:"healer", weapon:"Forgebark",         offhand:"Mistcaller",          head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:1, role:"dps",    weapon:"Crystal Reaper",    offhand:"",                    head:"Royal cowl",     chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:1, role:"dps",    weapon:"Dagger pair",       offhand:"",                    head:"Stalker hood",   chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  // ── A TIER ──
+  { prio:2, role:"tank",   weapon:"Dreadstorm Monarch",offhand:"Mistcaller",          head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Avalonian cape",  food:"Omelette",  potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:2, role:"tank",   weapon:"Claws",             offhand:"",                    head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:2, role:"tank",   weapon:"Primal",            offhand:"",                    head:"Specter hood",   chest:"Royal jacket",    feet:"Hunter Shoes",    cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:2, role:"healer", weapon:"Lifetouch",         offhand:"Celestial censer",    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:2, role:"healer", weapon:"Lifetouch",         offhand:"Mistcaller",          head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:2, role:"healer", weapon:"Hallowfall",        offhand:"Celestial censer",    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:2, role:"healer", weapon:"Hallowfall",        offhand:"Mistcaller",          head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:2, role:"healer", weapon:"1H Holy",           offhand:"Celestial censer",    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:2, role:"healer", weapon:"1H Holy",           offhand:"Mistcaller",          head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:2, role:"dps",    weapon:"1H Dagger",         offhand:"Blueflame Torch",     head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:2, role:"dps",    weapon:"Blazing",           offhand:"",                    head:"Assassin hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Lymhurst cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:2, role:"dps",    weapon:"Dawnsong",          offhand:"",                    head:"Assassin hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Lymhurst cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:2, role:"dps",    weapon:"Demon fang",        offhand:"Cryptcandle",         head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:2, role:"dps",    weapon:"Twin Slayers",      offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:2, role:"dps",    weapon:"Claws",             offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  // ── B TIER ──
+  { prio:3, role:"tank",   weapon:"Realmbreaker",      offhand:"",                    head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:3, role:"tank",   weapon:"Forcepulse Bracers",offhand:"",                    head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Avalonian cape",  food:"Beef stew", potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:3, role:"healer", weapon:"Redemption",        offhand:"",                    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:3, role:"healer", weapon:"Redemption",        offhand:"",                    head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:3, role:"healer", weapon:"Fallen",            offhand:"",                    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:3, role:"healer", weapon:"Fallen",            offhand:"",                    head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:3, role:"healer", weapon:"Great Holy",        offhand:"",                    head:"Specter hood",   chest:"Royal jacket",    feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:3, role:"healer", weapon:"Great Holy",        offhand:"",                    head:"Specter hood",   chest:"Royal robe",      feet:"Cultist sandals", cape:"Lymhurst cape",   food:"Omelette",  potion:"Calming Potion", note:"" },
+  { prio:3, role:"dps",    weapon:"Deathgivers",       offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:3, role:"dps",    weapon:"Trinity",           offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:3, role:"dps",    weapon:"Great Fire",        offhand:"",                    head:"Druid cowl",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Lymhurst cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:3, role:"dps",    weapon:"Forcepulse Bracers",offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Morgana cape",    food:"Beef stew", potion:"Calming Potion", note:"" },
+  // ── C TIER ──
+  { prio:4, role:"tank",   weapon:"Shadowcaller",      offhand:"Mistcaller",          head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Avalonian cape",  food:"Beef stew", potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:4, role:"tank",   weapon:"Carving sword",     offhand:"",                    head:"Assassin Hood",  chest:"Guardian Armor",  feet:"Cultist sandals", cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"Bring Knight Helmet and any spear as swap. Bring Morgana cage." },
+  { prio:4, role:"dps",    weapon:"Hellspawn",         offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Stalker shoes",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"1H Curse",          offhand:"Blueflame Torch",     head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"Spiked",            offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Morgana cape",    food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"Brawler gloves",    offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Morgana cape",    food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"Wildfire",          offhand:"Cryptcandle",         head:"Druid cowl",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Lymhurst cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"Boltcasters",       offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Caerleon cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"1H Fire",           offhand:"Cryptcandle",         head:"Druid cowl",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Lymhurst cape",   food:"Beef stew", potion:"Calming Potion", note:"" },
+  { prio:4, role:"dps",    weapon:"Whispering bow",    offhand:"",                    head:"Stalker hood",               chest:"Druid robe",      feet:"Royal sandals",   cape:"Morgana cape",    food:"Beef stew", potion:"Calming Potion", note:"" },
+];
+
 /* ─────────────────────────────────────────
    HELPERS
 ───────────────────────────────────────── */
@@ -601,144 +858,148 @@ function imgUrl(name) {
 function imgTag(name, size) {
   const url = imgUrl(name);
   const r = size > 36 ? 7 : 5;
-  const base = `width:${size}px;height:${size}px;border-radius:${r}px;border:1px solid var(--border2);background:var(--surface2);object-fit:contain;flex-shrink:0`;
+  const base = `width:${size}px;height:${size}px;border-radius:${r}px;border:1px solid var(--line-2);background:var(--surface-2);object-fit:contain;flex-shrink:0`;
   if (!url) return `<div style="${base}"></div>`;
-  return `<img src="${url}" width="${size}" height="${size}" style="${base}" alt="${name}" onerror="this.style.opacity='0.15'">`;
+  return `<img src="${url}" width="${size}" height="${size}" style="${base}" alt="${name}" loading="lazy" onerror="this.style.opacity='0.15'">`;
 }
 
-/* ─────────────────────────────────────────
-   TABLE RENDERING
-───────────────────────────────────────── */
-function renderRows(builds) {
-  const tbody      = document.getElementById('tbody');
-  const empty      = document.getElementById('empty');
-  const countLabel = document.getElementById('count-label');
-
-  countLabel.textContent = `${builds.length} build${builds.length !== 1 ? 's' : ''}`;
-
-  if (!builds.length) {
-    tbody.innerHTML = '';
-    empty.style.display = '';
-    return;
-  }
-  empty.style.display = 'none';
-
-  tbody.innerHTML = builds.map(b => `
-    <tr data-prio="${b.prio}" data-role="${b.role}">
-      <td><span class="prio-num" data-rank="${b.prio <= 3 ? b.prio : ''}">${b.prio}</span></td>
-      <td><span class="role-pill role-${b.role}">
-        <span class="role-pill-dot" style="background:${ROLE_COLORS[b.role]}"></span>
-        ${ROLE_LABELS[b.role]}
-      </span></td>
-      <td><div class="weapon-cell">
-        ${imgTag(b.weapon, 26)}
-        <span class="weapon-name" title="${b.weapon}">${b.weapon}</span>
-      </div></td>
-    </tr>`).join('');
-
-  tbody.querySelectorAll('tr').forEach(row => {
-    row.addEventListener('click', () => selectBuild(parseInt(row.dataset.prio)));
-  });
-}
-
-/* ─────────────────────────────────────────
-   DETAIL PANEL
-───────────────────────────────────────── */
 function slotCard(label, name) {
   if (!name && !label) return `<div class="slot-card empty spacer"></div>`;
   if (!name) return `
     <div class="slot-card empty">
       <div class="slot-empty-icon"></div>
-      <div class="slot-info">
-        <span class="slot-label">${label}</span>
-        <span class="slot-name">—</span>
-      </div>
+      <div class="slot-info"><span class="slot-label">${label}</span><span class="slot-name">—</span></div>
     </div>`;
   return `
     <div class="slot-card">
       ${imgTag(name, 56)}
-      <div class="slot-info">
-        <span class="slot-label">${label}</span>
-        <span class="slot-name" title="${name}">${name}</span>
-      </div>
+      <div class="slot-info"><span class="slot-label">${label}</span><span class="slot-name" title="${name}">${name}</span></div>
     </div>`;
 }
 
-function selectBuild(prio) {
-  const b = BUILDS.find(x => x.prio === prio);
-  if (!b) return;
-
-  // highlight row
-  document.querySelectorAll('#tbody tr').forEach(r =>
-    r.classList.toggle('selected', parseInt(r.dataset.prio) === prio)
-  );
-
-  const placeholder = document.getElementById('detail-placeholder');
-  const card        = document.getElementById('detail-card');
-
-  placeholder.style.display = 'none';
-  card.classList.add('visible');
-
-  const color = ROLE_COLORS[b.role];
-
-  card.innerHTML = `
-    <div class="card-header">
-      <div class="card-role-bar" style="background:${color}"></div>
-      <div class="card-title">${b.weapon}</div>
-      <div class="card-meta">
-        <span class="role-pill role-${b.role}">
-          <span class="role-pill-dot" style="background:${color}"></span>
-          ${ROLE_LABELS[b.role]}
-        </span>
-        <span class="card-prio">Priority #${b.prio}</span>
-        ${b.note ? `<span class="card-note">⚑ ${b.note}</span>` : ''}
-      </div>
-    </div>
-
-    <div>
-      <div class="section-label">Build</div>
-      <div class="slots-grid">
-        ${slotCard('',        '')}
-        ${slotCard('Head',    b.head)}
-        ${slotCard('Cape',    b.cape)}
-        ${slotCard('Weapon',  b.weapon)}
-        ${slotCard('Chest',   b.chest)}
-        ${slotCard('Offhand', b.offhand)}
-        ${slotCard('Potion',  b.potion)}
-        ${slotCard('Feet',    b.feet)}
-        ${slotCard('Food',    b.food)}
-      </div>
-    </div>`;
-}
+const FLAG_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a1 1 0 0 1 1.45-.9L19 9.5 5.45 16.4A1 1 0 0 1 4 15.5"/></svg>`;
 
 /* ─────────────────────────────────────────
-   FILTERS
+   GENERIC TAB ENGINE
+   (drives Brawl / Kite & Clap / Tracking —
+   identical behavior, one implementation)
 ───────────────────────────────────────── */
-let activeRole = 'all', searchStr = '';
+function createTab(opts) {
+  const { allBuilds, searchId, filterId, countId, tbodyId, emptyId, placeholderId, cardId, paneId } = opts;
+  let activeRole = 'all', searchStr = '', currentList = allBuilds.slice();
 
-function applyFilters() {
-  const q = searchStr.toLowerCase();
-  const filtered = BUILDS.filter(b => {
-    const roleOk   = activeRole === 'all' || b.role === activeRole;
-    const searchOk = !q || [b.weapon, b.offhand, b.head, b.chest, b.feet, b.cape, b.note]
-                           .some(v => v && v.toLowerCase().includes(q));
-    return roleOk && searchOk;
+  function render(builds) {
+    currentList = builds;
+    const tbody = document.getElementById(tbodyId);
+    const empty = document.getElementById(emptyId);
+    const countLabel = document.getElementById(countId);
+    countLabel.textContent = `${builds.length} build${builds.length !== 1 ? 's' : ''}`;
+
+    if (!builds.length) { tbody.innerHTML = ''; empty.style.display = ''; return; }
+    empty.style.display = 'none';
+
+    tbody.innerHTML = builds.map((b, i) => `
+      <tr data-idx="${i}" data-role="${b.role}">
+        <td><span class="prio-num">${opts.useTier ? TIER_LABELS[b.prio] || b.prio : b.prio}</span></td>
+        <td><span class="role-pill role-${b.role}">
+          <span class="role-pill-dot" style="background:${ROLE_COLORS[b.role]}"></span>
+          ${ROLE_LABELS[b.role]}
+        </span></td>
+        <td><div class="weapon-cell">
+          ${imgTag(b.weapon, 27)}
+          <span class="weapon-name" title="${b.weapon}">${b.weapon}</span>
+        </div></td>
+      </tr>`).join('');
+
+    tbody.querySelectorAll('tr').forEach(row => {
+      row.addEventListener('click', () => select(parseInt(row.dataset.idx)));
+    });
+  }
+
+  function select(idx) {
+    const b = currentList[idx];
+    if (!b) return;
+
+    document.querySelectorAll(`#${tbodyId} tr`).forEach(r =>
+      r.classList.toggle('selected', parseInt(r.dataset.idx) === idx)
+    );
+
+    const placeholder = document.getElementById(placeholderId);
+    const card        = document.getElementById(cardId);
+    const pane        = document.getElementById(paneId);
+
+    placeholder.style.display = 'none';
+    card.classList.add('visible');
+    pane.classList.add('open');
+
+    const color = ROLE_COLORS[b.role];
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-role-bar" style="background:${color}"></div>
+        <div class="card-title">${b.weapon}</div>
+        <div class="card-meta">
+          <span class="role-pill role-${b.role}">
+            <span class="role-pill-dot" style="background:${color}"></span>
+            ${ROLE_LABELS[b.role]}
+          </span>
+          <span class="card-prio">${opts.useTier ? 'Tier ' + (TIER_LABELS[b.prio] || b.prio) : 'Priority #' + b.prio}</span>
+          ${b.note ? `<span class="card-note">${FLAG_SVG}${b.note}</span>` : ''}
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Build</div>
+        <div class="slots-grid">
+          ${slotCard('', '')}
+          ${slotCard('Head', b.head)}
+          ${slotCard('Cape', b.cape)}
+          ${slotCard('Weapon', b.weapon)}
+          ${slotCard('Chest', b.chest)}
+          ${slotCard('Offhand', b.offhand)}
+          ${slotCard('Potion', b.potion)}
+          ${slotCard('Feet', b.feet)}
+          ${slotCard('Food', b.food)}
+        </div>
+      </div>`;
+  }
+
+  function closeDetail() {
+    document.getElementById(paneId).classList.remove('open');
+  }
+
+  function applyFilters() {
+    const q = searchStr.toLowerCase();
+    const filtered = allBuilds.filter(b => {
+      const roleOk   = activeRole === 'all' || b.role === activeRole;
+      const searchOk = !q || [b.weapon, b.offhand, b.head, b.chest, b.feet, b.cape, b.note]
+                             .some(v => v && v.toLowerCase().includes(q));
+      return roleOk && searchOk;
+    });
+    render(filtered);
+  }
+
+  document.getElementById(searchId).addEventListener('input', e => {
+    searchStr = e.target.value;
+    applyFilters();
   });
-  renderRows(filtered);
+
+  document.getElementById(filterId).addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    activeRole = btn.dataset.role;
+    document.querySelectorAll(`#${filterId} .filter-btn`).forEach(b => b.classList.toggle('active', b === btn));
+    applyFilters();
+  });
+
+  const backBtn = document.querySelector(`.detail-back-btn[data-back-for="${opts.tabKey}"]`);
+  if (backBtn) backBtn.addEventListener('click', closeDetail);
+
+  render(allBuilds);
 }
 
-document.getElementById('search').addEventListener('input', e => {
-  searchStr = e.target.value;
-  applyFilters();
-});
-
-document.getElementById('filter-group').addEventListener('click', e => {
-  const btn = e.target.closest('.filter-btn');
-  if (!btn) return;
-  activeRole = btn.dataset.role;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-  applyFilters();
-});
+createTab({ allBuilds: BUILDS,          tabKey: 'brawl',    searchId: 'search',          filterId: 'filter-group',          countId: 'count-label',          tbodyId: 'tbody',          emptyId: 'empty',          placeholderId: 'detail-placeholder',          cardId: 'detail-card',          paneId: 'brawl-detail-pane' });
+createTab({ allBuilds: BUILDS_KITE,     tabKey: 'kite',     searchId: 'kite-search',     filterId: 'kite-filter-group',     countId: 'kite-count-label',     tbodyId: 'kite-tbody',     emptyId: 'kite-empty',     placeholderId: 'kite-detail-placeholder',     cardId: 'kite-detail-card',     paneId: 'kite-detail-pane' });
+createTab({ allBuilds: BUILDS_TRACKING, tabKey: 'tracking', searchId: 'tracking-search', filterId: 'tracking-filter-group', countId: 'tracking-count-label', tbodyId: 'tracking-tbody', emptyId: 'tracking-empty', placeholderId: 'tracking-detail-placeholder', cardId: 'tracking-detail-card', paneId: 'tracking-detail-pane', useTier: true });
 
 /* ─────────────────────────────────────────
    COPY BUTTON
@@ -747,7 +1008,7 @@ const toast = document.getElementById('toast');
 let toastTimer;
 document.getElementById('copy-btn').addEventListener('click', () => {
   navigator.clipboard.writeText(window.location.href).then(() => {
-    toast.textContent = '✓ Link copied — paste it in Discord';
+    toast.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Link copied — paste it in Discord`;
     toast.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
@@ -764,11 +1025,6 @@ document.getElementById('tab-nav').addEventListener('click', e => {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
 });
-
-/* ─────────────────────────────────────────
-   INIT
-───────────────────────────────────────── */
-renderRows(BUILDS);
 </script>
 </body>
 </html>
